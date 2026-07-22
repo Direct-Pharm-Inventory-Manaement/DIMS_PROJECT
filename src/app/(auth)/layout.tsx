@@ -1,5 +1,5 @@
+import Image from "next/image";
 import Link from "next/link";
-import { version } from "../../../package.json";
 
 export default function AuthLayout({
   children,
@@ -7,12 +7,15 @@ export default function AuthLayout({
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex flex-1 flex-col">{children}</main>
-      <footer className="bg-brand-800 text-brand-100">
+      <footer className="bg-accent-500 text-white">
         <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-3 px-6 py-4 text-xs font-medium tracking-wide sm:flex-row">
-          <p className="uppercase">
-            {`© ${new Date().getFullYear()} Direct Pharmacy – Inventory Management System v${version}`}
-          </p>
-          <nav className="flex items-center gap-6 uppercase">
+          <Image
+            src="/footer-logo.png"
+            alt="Direct Inventory Manager"
+            width={137}
+            height={26}
+          />
+          <nav className="flex items-center gap-6 uppercase text-white/85">
             <Link href="#" className="transition-colors hover:text-white">
               Privacy Policy
             </Link>
