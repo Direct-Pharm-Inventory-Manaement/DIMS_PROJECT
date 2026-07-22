@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/Logo dark.png" alt="DIM logo" width="96" />
+  <img src="public/logo-dark.png" alt="DIM logo" width="96" />
 
   # Direct Inventory Manager (DIM)
 
