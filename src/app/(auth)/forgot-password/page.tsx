@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Info } from "lucide-react";
 import { AuthHero } from "@/components/auth/auth-hero";
-import { LoginForm } from "@/components/auth/login-form";
+import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
 
 export const metadata: Metadata = {
-  title: "Sign In — Direct Inventory Manager",
+  title: "Forgot Password — Direct Inventory Manager",
   description:
-    "Sign in to the Direct Inventory Manager to manage pharmacy inventory, expiry risk, and stock transfers.",
+    "Recover access to the Direct Inventory Manager with a one-time code sent to your email.",
 };
 
-export default function LoginPage() {
+export default function ForgotPasswordPage() {
   return (
     <div className="flex flex-1">
       <AuthHero
@@ -31,12 +31,13 @@ export default function LoginPage() {
               />
             </div>
             <h2 className="mt-6 text-center text-3xl font-bold text-brand-600">
-              Welcome Back
+              Forgot Password?
             </h2>
             <p className="mt-2 text-center text-sm leading-6 text-zinc-500">
-              Enter your credentials to access the Direct Inventory Manager.
+              Enter your email address and we&apos;ll send you a one-time code
+              to sign back in.
             </p>
-            <LoginForm />
+            <ForgotPasswordForm />
           </div>
 
           <div className="flex w-full items-start gap-3 rounded-xl bg-zinc-200/60 p-4">
