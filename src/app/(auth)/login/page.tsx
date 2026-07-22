@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Archive, Info } from "lucide-react";
+import { Info } from "lucide-react";
 import { LoginForm } from "@/components/auth/login-form";
 
 export const metadata: Metadata = {
@@ -22,12 +22,20 @@ export default function LoginPage() {
           sizes="(min-width: 1024px) 50vw, 0vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-brand-900/75" aria-hidden />
+        <div
+          className="absolute inset-0 bg-gradient-to-r from-brand-900/70 via-brand-900/40 to-brand-900/15"
+          aria-hidden
+        />
         <div className="relative z-10 flex flex-col justify-center gap-6 px-12 py-16 xl:px-16">
           <div className="flex items-center gap-4">
-            <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/20">
-              <Archive className="h-7 w-7 text-white" aria-hidden />
-            </span>
+            <Image
+              src="/logo-light.png"
+              alt=""
+              width={56}
+              height={56}
+              priority
+              className="rounded-xl shadow-lg"
+            />
             <div>
               <p className="text-3xl font-bold text-white">
                 Direct Inventory Manager
@@ -38,7 +46,17 @@ export default function LoginPage() {
             </div>
           </div>
           <h1 className="max-w-md text-3xl font-bold leading-tight text-white">
-            Secure recovery for critical pharmaceutical data.
+            {"Secure recovery for critical pharmaceutical data."
+              .split(" ")
+              .map((word, index) => (
+                <span
+                  key={index}
+                  className="hero-word mr-[0.3em]"
+                  style={{ animationDelay: `${index * 110}ms` }}
+                >
+                  {word}
+                </span>
+              ))}
           </h1>
           <p className="max-w-lg text-base leading-7 text-brand-100">
             Regain access to your pharmacy&apos;s management dashboard. Our
