@@ -41,7 +41,7 @@ export default function LoginPage() {
                 Direct Inventory Manager
               </p>
               <p className="mt-1 text-xs font-semibold uppercase tracking-[0.2em] text-brand-200">
-                Pharmacy Excellence Simplified
+                Pharmacy Inventory, In Order
               </p>
             </div>
           </div>
@@ -67,8 +67,9 @@ export default function LoginPage() {
       </section>
 
       {/* Right panel — sign-in card */}
-      <section className="flex flex-1 flex-col items-center justify-center gap-6 bg-zinc-100 px-4 py-12 sm:px-8">
-        <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-sm sm:p-10">
+      <section className="flex flex-1 flex-col items-center overflow-y-auto bg-zinc-100 px-4 py-8 sm:px-8">
+        <div className="my-auto flex w-full max-w-md flex-col gap-6">
+        <div className="w-full rounded-2xl bg-white p-8 shadow-sm sm:p-10">
           <div className="flex justify-center">
             <Image
               src="/login-logo.png"
@@ -87,7 +88,7 @@ export default function LoginPage() {
           <LoginForm />
         </div>
 
-        <div className="flex w-full max-w-md items-start gap-3 rounded-xl bg-zinc-200/60 p-4">
+        <div className="flex w-full items-start gap-3 rounded-xl bg-zinc-200/60 p-4">
           <Info
             className="mt-0.5 h-5 w-5 shrink-0 text-accent-500"
             aria-hidden
@@ -97,6 +98,7 @@ export default function LoginPage() {
             please contact your System Administrator for a manual password
             reset.
           </p>
+        </div>
         </div>
       </section>
     </div>
