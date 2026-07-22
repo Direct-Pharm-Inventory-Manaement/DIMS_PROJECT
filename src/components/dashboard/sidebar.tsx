@@ -4,16 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Archive,
   ArrowLeftRight,
-  BarChart3,
-  CirclePlus,
-  LayoutGrid,
+  CalendarClock,
+  ClipboardPlus,
+  LayoutDashboard,
   LogOut,
+  PackagePlus,
+  Pill,
   Settings,
-  SquarePen,
-  TriangleAlert,
-  Users,
+  TrendingDown,
+  UsersRound,
   type LucideIcon,
 } from "lucide-react";
 
@@ -25,14 +25,14 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutGrid, exact: true },
-  { label: "Medicines List", href: "/dashboard/medicines", icon: Archive },
-  { label: "Add/Edit Medicine", href: "/dashboard/medicines/manage", icon: SquarePen },
-  { label: "Expiry Risk Dashboard", href: "/dashboard/expiry-risk", icon: TriangleAlert },
-  { label: "Low-Stock Predictions", href: "/dashboard/low-stock", icon: BarChart3 },
+  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, exact: true },
+  { label: "Medicines List", href: "/dashboard/medicines", icon: Pill },
+  { label: "Add/Edit Medicine", href: "/dashboard/medicines/manage", icon: ClipboardPlus },
+  { label: "Expiry Risk Dashboard", href: "/dashboard/expiry-risk", icon: CalendarClock },
+  { label: "Low-Stock Predictions", href: "/dashboard/low-stock", icon: TrendingDown },
   { label: "Transfer Requests", href: "/dashboard/transfers", icon: ArrowLeftRight },
-  { label: "Create Transfer Request", href: "/dashboard/transfers/new", icon: CirclePlus },
-  { label: "User Management", href: "/dashboard/users", icon: Users },
+  { label: "Create Transfer Request", href: "/dashboard/transfers/new", icon: PackagePlus },
+  { label: "User Management", href: "/dashboard/users", icon: UsersRound },
 ];
 
 function NavLink({ item, active }: { item: NavItem; active: boolean }) {
@@ -47,7 +47,7 @@ function NavLink({ item, active }: { item: NavItem; active: boolean }) {
           : "text-brand-200 hover:bg-brand-700/60 hover:text-white"
       }`}
     >
-      <Icon className="h-4.5 w-4.5 shrink-0" aria-hidden />
+      <Icon className="h-5 w-5 shrink-0" aria-hidden />
       {item.label}
     </Link>
   );
@@ -98,7 +98,7 @@ export function Sidebar() {
           href="/login"
           className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-brand-200 transition-colors hover:bg-brand-700/60 hover:text-white"
         >
-          <LogOut className="h-4.5 w-4.5 shrink-0" aria-hidden />
+          <LogOut className="h-5 w-5 shrink-0" aria-hidden />
           Logout
         </Link>
       </div>
