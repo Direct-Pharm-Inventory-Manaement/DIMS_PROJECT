@@ -16,6 +16,7 @@ import {
   UsersRound,
   type LucideIcon,
 } from "lucide-react";
+import { clearAuth } from "@/lib/auth-storage";
 
 interface NavItem {
   label: string;
@@ -96,6 +97,7 @@ export function Sidebar() {
         />
         <Link
           href="/login"
+          onClick={() => clearAuth()}
           className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-brand-200 transition-colors hover:bg-brand-700/60 hover:text-white"
         >
           <LogOut className="h-5 w-5 shrink-0" aria-hidden />

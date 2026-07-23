@@ -17,6 +17,18 @@ interface RequestOptions {
   signal?: AbortSignal;
 }
 
+function authHeader(): Record<string, string> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = localStorage.getItem("dims.auth");
+    if (!raw) return {};
+    const { token } = JSON.parse(raw) as { token?: string };
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  } catch {
+    return {};
+  }
+}
+
 export async function apiRequest<T>(
   path: string,
   { method = "GET", body, signal }: RequestOptions = {},
@@ -26,7 +38,10 @@ export async function apiRequest<T>(
     response = await fetch(`${API_BASE_URL}${path}`, {
       method,
       signal,
-      headers: body !== undefined ? { "Content-Type": "application/json" } : undefined,
+      headers: {
+        ...(body !== undefined ? { "Content-Type": "application/json" } : {}),
+        ...authHeader(),
+      },
       body: body !== undefined ? JSON.stringify(body) : undefined,
     });
   } catch (error) {
@@ -48,5 +63,6 @@ export async function apiRequest<T>(
     throw new ApiError(message, response.status);
   }
 
+  if (response.status === 204) return undefined as T;
   return (await response.json()) as T;
 }

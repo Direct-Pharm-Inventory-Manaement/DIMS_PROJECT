@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { login } from "@/lib/api/auth";
 import { ApiError } from "@/lib/api/client";
+import { setAuth } from "@/lib/auth-storage";
 
 interface FieldErrors {
   identifier?: string;
@@ -48,7 +49,8 @@ export function LoginForm() {
 
     setPending(true);
     try {
-      await login({ identifier: identifier.trim(), password });
+      const session = await login({ identifier: identifier.trim(), password });
+      setAuth(session);
       router.push("/dashboard");
     } catch (error) {
       setFormError(

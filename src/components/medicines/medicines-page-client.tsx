@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   BellRing,
@@ -12,10 +12,37 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { MedicinesTable } from "@/components/medicines/medicines-table";
-import { medicinesSummary } from "@/lib/mock/medicines-data";
+import {
+  getMedicinesSummary,
+  type MedicinesSummary,
+} from "@/lib/api/medicines";
+
+function SummaryValue({
+  value,
+  className,
+}: {
+  value: number | null;
+  className: string;
+}) {
+  if (value === null) {
+    return <div className="h-9 w-16 animate-pulse rounded bg-zinc-200/80" />;
+  }
+  return <p className={className}>{value.toLocaleString()}</p>;
+}
 
 export function MedicinesPageClient() {
   const [exportRequestId, setExportRequestId] = useState(0);
+  const [summary, setSummary] = useState<MedicinesSummary | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    getMedicinesSummary(controller.signal)
+      .then(setSummary)
+      .catch(() => {
+        // The table's error banner covers API failure; strips stay skeletal.
+      });
+    return () => controller.abort();
+  }, []);
 
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-6">
@@ -66,12 +93,13 @@ export function MedicinesPageClient() {
               <ClipboardCheck className="h-4.5 w-4.5" aria-hidden />
             </span>
           </div>
-          <p className="text-3xl font-bold text-brand-800">
-            {medicinesSummary.totalSkus.toLocaleString()}
-          </p>
+          <SummaryValue
+            value={summary?.totalSkus ?? null}
+            className="text-3xl font-bold text-brand-800"
+          />
           <p className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
             <TrendingUp className="h-3.5 w-3.5" aria-hidden />
-            +{medicinesSummary.skusDeltaThisMonth} this month
+            Updated live from inventory
           </p>
         </article>
 
@@ -84,9 +112,10 @@ export function MedicinesPageClient() {
               <BellRing className="h-4.5 w-4.5" aria-hidden />
             </span>
           </div>
-          <p className="text-3xl font-bold text-amber-600">
-            {medicinesSummary.lowStockAlerts}
-          </p>
+          <SummaryValue
+            value={summary?.lowStockAlerts ?? null}
+            className="text-3xl font-bold text-amber-600"
+          />
           <p className="text-xs italic text-zinc-500">
             Requires immediate reorder
           </p>
@@ -101,11 +130,16 @@ export function MedicinesPageClient() {
               <CircleMinus className="h-4.5 w-4.5" aria-hidden />
             </span>
           </div>
-          <p className="text-3xl font-bold text-red-600">
-            {medicinesSummary.stockOuts}
-          </p>
+          <SummaryValue
+            value={summary?.stockOuts ?? null}
+            className="text-3xl font-bold text-red-600"
+          />
           <p className="text-xs text-zinc-500">
-            Impacting {medicinesSummary.stockOutBranches} service branches
+            {summary
+              ? `Impacting ${summary.stockOutBranches} service ${
+                  summary.stockOutBranches === 1 ? "branch" : "branches"
+                }`
+              : "…"}
           </p>
         </article>
       </div>

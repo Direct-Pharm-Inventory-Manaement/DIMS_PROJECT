@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { requestPasswordOtp, verifyPasswordOtp } from "@/lib/api/auth";
 import { ApiError } from "@/lib/api/client";
+import { setAuth } from "@/lib/auth-storage";
 
 const OTP_LENGTH = 6;
 const RESEND_COOLDOWN_SECONDS = 60;
@@ -145,7 +146,8 @@ export function ForgotPasswordForm() {
     }
     setPending(true);
     try {
-      await verifyPasswordOtp(email.trim(), otp);
+      const session = await verifyPasswordOtp(email.trim(), otp);
+      setAuth(session);
       router.push("/dashboard");
     } catch (error) {
       setFormError(
