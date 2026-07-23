@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/dashboard/coming-soon";
+import { MedicineForm } from "@/components/medicines/medicine-form";
 
 export const metadata: Metadata = {
   title: "Add/Edit Medicine — Direct Inventory Manager",
+  description:
+    "Register a new medicine or update an existing entry in the pharmacy inventory system.",
 };
 
-export default function Page() {
-  return <ComingSoon title="Add/Edit Medicine" />;
+export default async function ManageMedicinePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ id?: string }>;
+}) {
+  const { id } = await searchParams;
+  return <MedicineForm medicineId={id} />;
 }

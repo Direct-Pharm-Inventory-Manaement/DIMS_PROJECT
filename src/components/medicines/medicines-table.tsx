@@ -307,7 +307,7 @@ export function MedicinesTable({
                       {`${m.name} ${m.strength}`.trim()}
                     </p>
                     <p className="mt-0.5 text-xs text-zinc-400">
-                      {m.form} • {m.packaging}
+                      {m.packaging ? `${m.form} • ${m.packaging}` : m.form}
                     </p>
                   </td>
                   <td className="py-4 pr-4 text-zinc-600">{m.category}</td>
@@ -346,7 +346,7 @@ export function MedicinesTable({
                   <td className="py-4">
                     <div className="flex items-center gap-1">
                       <Link
-                        href="/dashboard/medicines/manage"
+                        href={`/dashboard/medicines/manage?id=${m.id}`}
                         aria-label={`Edit ${m.name}`}
                         className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-brand-50 hover:text-brand-600"
                       >
