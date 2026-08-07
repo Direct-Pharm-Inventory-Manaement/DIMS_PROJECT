@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/dashboard/coming-soon";
+import { TransfersPageClient } from "@/components/transfers/transfers-page-client";
 
 export const metadata: Metadata = {
   title: "Transfer Requests — Direct Inventory Manager",
+  description: "Review, approve, and track stock transfers across branches.",
 };
 
-export default function Page() {
-  return <ComingSoon title="Transfer Requests" />;
+export default function TransfersPage() {
+  return <TransfersPageClient />;
 }
