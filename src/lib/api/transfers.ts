@@ -1,6 +1,7 @@
 import { apiRequest } from "./client";
 
 export type TransferStatus = "pending" | "approved" | "rejected" | "completed";
+export type TransferPriority = "standard" | "express" | "critical";
 
 export interface Transfer {
   id: string;
@@ -13,12 +14,26 @@ export interface Transfer {
   destinationBranch: string;
   quantity: number;
   status: TransferStatus;
+  priority: TransferPriority;
+  /** ISO date string, or null. */
+  requestedDeliveryDate: string | null;
+  notes: string;
   requestedBy: { id: string; name: string };
   reviewNote: string;
   /** ISO datetime string. */
   createdAt: string;
   /** ISO datetime string, or null. */
   completedAt: string | null;
+}
+
+export interface CreateTransferInput {
+  medicineId: string;
+  destinationBranch: string;
+  quantity: number;
+  priority?: TransferPriority;
+  /** yyyy-mm-dd */
+  requestedDeliveryDate?: string;
+  notes?: string;
 }
 
 export interface ListTransfersParams {
@@ -70,6 +85,10 @@ export function getTransfersSummary(signal?: AbortSignal): Promise<TransfersSumm
 
 export function getTransfersFacets(signal?: AbortSignal): Promise<TransfersFacets> {
   return apiRequest<TransfersFacets>("/transfers/facets", { signal });
+}
+
+export function createTransfer(input: CreateTransferInput): Promise<Transfer> {
+  return apiRequest<Transfer>("/transfers", { method: "POST", body: input });
 }
 
 export function approveTransfer(id: string): Promise<Transfer> {

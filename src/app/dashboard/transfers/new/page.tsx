@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/dashboard/coming-soon";
+import { CreateTransferForm } from "@/components/transfers/create-transfer-form";
 
 export const metadata: Metadata = {
   title: "Create Transfer Request — Direct Inventory Manager",
+  description: "Request movement of medicines between branches to maintain optimal stock levels.",
 };
 
-export default function Page() {
-  return <ComingSoon title="Create Transfer Request" />;
+export default function CreateTransferPage() {
+  return <CreateTransferForm />;
 }

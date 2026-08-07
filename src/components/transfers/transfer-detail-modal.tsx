@@ -18,7 +18,7 @@ import {
   type Transfer,
 } from "@/lib/api/transfers";
 import { RequesterAvatar } from "@/components/transfers/requester-avatar";
-import { STATUS_BADGE } from "@/components/transfers/status-badge";
+import { PRIORITY_BADGE, STATUS_BADGE } from "@/components/transfers/status-badge";
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-GB", {
@@ -111,11 +111,20 @@ export function TransferDetailModal({
           </button>
         </div>
 
-        <span
-          className={`mt-3 inline-block rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ${badge.classes}`}
-        >
-          {badge.label}
-        </span>
+        <div className="mt-3 flex items-center gap-2">
+          <span
+            className={`inline-block rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ${badge.classes}`}
+          >
+            {badge.label}
+          </span>
+          {transfer.priority !== "standard" && (
+            <span
+              className={`inline-block rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ${PRIORITY_BADGE[transfer.priority]}`}
+            >
+              {transfer.priority}
+            </span>
+          )}
+        </div>
 
         <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 text-sm">
           <div>
@@ -151,6 +160,24 @@ export function TransferDetailModal({
             <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">Date</p>
             <p className="mt-0.5 font-medium text-zinc-700">{formatDate(transfer.createdAt)}</p>
           </div>
+          {transfer.requestedDeliveryDate && (
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                Requested Delivery
+              </p>
+              <p className="mt-0.5 font-medium text-zinc-700">
+                {formatDate(transfer.requestedDeliveryDate)}
+              </p>
+            </div>
+          )}
+          {transfer.notes && (
+            <div className="col-span-2 rounded-lg bg-zinc-50 p-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
+                Requester Notes
+              </p>
+              <p className="mt-0.5 text-zinc-600">{transfer.notes}</p>
+            </div>
+          )}
           {transfer.reviewNote && (
             <div className="col-span-2 rounded-lg bg-zinc-50 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
