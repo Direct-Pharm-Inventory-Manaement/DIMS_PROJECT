@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/dashboard/coming-soon";
+import { LowStockPageClient } from "@/components/low-stock/low-stock-page-client";
 
 export const metadata: Metadata = {
   title: "Low-Stock Predictions — Direct Inventory Manager",
+  description: "Identify medicines likely to run out based on historical sales and lead times.",
 };
 
-export default function Page() {
-  return <ComingSoon title="Low-Stock Predictions" />;
+export default function LowStockPage() {
+  return <LowStockPageClient />;
 }
