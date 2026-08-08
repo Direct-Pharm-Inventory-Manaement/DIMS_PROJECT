@@ -6,14 +6,12 @@ import {
   AlertCircle,
   ChevronLeft,
   ChevronRight,
-  Loader2,
   Pencil,
   RefreshCw,
   Trash2,
 } from "lucide-react";
 import { ApiError } from "@/lib/api/client";
 import {
-  deleteMedicine,
   getMedicinesFacets,
   listMedicines,
   type ListMedicinesResult,
@@ -21,6 +19,8 @@ import {
   type MedicineStatus,
 } from "@/lib/api/medicines";
 import { Dropdown } from "@/components/ui/dropdown";
+import { DeleteMedicineModal } from "@/components/medicines/delete-medicine-modal";
+import { useToast } from "@/components/ui/toast";
 
 const PAGE_SIZE = 5;
 const EXPORT_PAGE_SIZE = 500;
@@ -124,7 +124,8 @@ export function MedicinesTable({
   } | null>(null);
   const [categories, setCategories] = useState<string[]>([]);
   const [branches, setBranches] = useState<string[]>([]);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [pendingDelete, setPendingDelete] = useState<Medicine | null>(null);
+  const { showToast } = useToast();
 
   const filterParams = useMemo(
     () => ({
@@ -193,25 +194,13 @@ export function MedicinesTable({
     setPage(1);
   }, []);
 
-  async function handleDelete(medicine: Medicine) {
-    const confirmed = window.confirm(
-      `Delete ${medicine.name} (${medicine.batchNo})? This cannot be undone.`,
+  function handleDeleted(medicine: Medicine) {
+    setPendingDelete(null);
+    setRefreshId((id) => id + 1);
+    showToast(
+      "success",
+      `${medicine.name} ${medicine.strength}`.trim() + " was deleted successfully.",
     );
-    if (!confirmed) return;
-    setDeletingId(medicine.id);
-    try {
-      await deleteMedicine(medicine.id);
-      setRefreshId((id) => id + 1);
-    } catch (err) {
-      setAnswered({
-        key: queryKey,
-        data: result,
-        error:
-          err instanceof ApiError ? err.message : "Failed to delete medicine.",
-      });
-    } finally {
-      setDeletingId(null);
-    }
   }
 
   const total = result?.total ?? 0;
@@ -355,15 +344,10 @@ export function MedicinesTable({
                       <button
                         type="button"
                         aria-label={`Delete ${m.name}`}
-                        disabled={deletingId === m.id}
-                        onClick={() => handleDelete(m)}
-                        className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed"
+                        onClick={() => setPendingDelete(m)}
+                        className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600"
                       >
-                        {deletingId === m.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-                        ) : (
-                          <Trash2 className="h-4 w-4" aria-hidden />
-                        )}
+                        <Trash2 className="h-4 w-4" aria-hidden />
                       </button>
                     </div>
                   </td>
@@ -429,6 +413,14 @@ export function MedicinesTable({
           </button>
         </nav>
       </div>
+
+      {pendingDelete && (
+        <DeleteMedicineModal
+          medicine={pendingDelete}
+          onClose={() => setPendingDelete(null)}
+          onDeleted={handleDeleted}
+        />
+      )}
     </section>
   );
 }

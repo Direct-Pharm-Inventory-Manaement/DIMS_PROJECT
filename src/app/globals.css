@@ -75,3 +75,41 @@ body {
     opacity: 1;
   }
 }
+
+/* Toast enter/exit — slides up and fades from the bottom stack. */
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes toast-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.toast-enter {
+  animation: toast-in 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.toast-exit {
+  animation: toast-out 0.15s ease-in forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast-enter,
+  .toast-exit {
+    animation: none;
+  }
+}
