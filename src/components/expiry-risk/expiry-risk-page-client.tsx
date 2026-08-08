@@ -8,9 +8,9 @@ import {
   BadgePercent,
   CircleCheck,
   ClipboardCheck,
-  Download,
   History,
   Info,
+  Printer,
   Sparkles,
   TriangleAlert,
   type LucideIcon,
@@ -25,7 +25,6 @@ import {
   getManufacturers,
   getRecentActions,
   getRiskDistribution,
-  listExpiryRisk,
   type ExpiryRiskSummary,
   type RecentAction,
   type RiskDistribution,
@@ -168,47 +167,6 @@ export function ExpiryRiskPageClient() {
   const filterKey = JSON.stringify(filters);
   const hasFilters = Boolean(riskTier || manufacturer || stockCategory);
 
-  async function handleGenerateReport() {
-    const result = await listExpiryRisk({ ...filters, page: 1, pageSize: 500 });
-    const header = [
-      "Medicine",
-      "Batch No.",
-      "Branch",
-      "Manufacturer",
-      "Stock Category",
-      "Quantity",
-      "Expiry Date",
-      "Risk Level",
-      "Suggested Action",
-      "Actioned",
-    ];
-    const lines = result.items.map((r) =>
-      [
-        `${r.name} ${r.strength}`.trim(),
-        r.batchNo,
-        r.branch,
-        r.manufacturer,
-        r.stockCategory,
-        r.quantity,
-        new Date(r.expiryDate).toLocaleDateString("en-GB"),
-        r.riskTier,
-        r.suggestedAction,
-        r.actioned ? "yes" : "no",
-      ]
-        .map((cell) => `"${String(cell).replaceAll('"', '""')}"`)
-        .join(","),
-    );
-    const blob = new Blob([[header.join(","), ...lines].join("\n")], {
-      type: "text/csv;charset=utf-8",
-    });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = "expiry-risk-report.csv";
-    anchor.click();
-    URL.revokeObjectURL(url);
-  }
-
   return (
     <div className="mx-auto flex max-w-7xl flex-col gap-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
@@ -220,14 +178,13 @@ export function ExpiryRiskPageClient() {
             Monitor medicines approaching expiration and manage inventory waste.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={handleGenerateReport}
+        <Link
+          href="/reports/expiry-risk"
           className="flex items-center gap-2 rounded-lg bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-brand-800"
         >
-          <Download className="h-4 w-4" aria-hidden />
+          <Printer className="h-4 w-4" aria-hidden />
           Generate Risk Report
-        </button>
+        </Link>
       </header>
 
       {answered?.key === refreshId && answered.error && (

@@ -1,13 +1,14 @@
 import { apiRequest } from "./client";
+import type { UserRole } from "./users";
 
-export type UserRole = "administrator" | "staff";
+export type { UserRole };
 
 export interface AuthUser {
   id: string;
   name: string;
   email: string;
   role: UserRole;
-  branch: "adenta" | "haatso";
+  branch: string;
 }
 
 export interface LoginRequest {
