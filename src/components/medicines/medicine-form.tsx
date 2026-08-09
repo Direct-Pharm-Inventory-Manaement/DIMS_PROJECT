@@ -27,6 +27,7 @@ import {
   type Medicine,
   type MedicineInput,
 } from "@/lib/api/medicines";
+import { getSettings } from "@/lib/api/settings";
 
 const DOSAGE_FORMS = [
   "Tablet",
@@ -267,6 +268,20 @@ export function MedicineForm({ medicineId }: { medicineId?: string }) {
       });
     return () => controller.abort();
   }, []);
+
+  useEffect(() => {
+    // Pre-fill the branch dropdown from Settings → General → Default
+    // Branch for brand-new entries only — never overrides an edit or a
+    // restored draft.
+    if (isEdit || readDraft()) return;
+    const controller = new AbortController();
+    getSettings(controller.signal)
+      .then((settings) => {
+        setForm((prev) => (prev.branch ? prev : { ...prev, branch: settings.defaultBranch }));
+      })
+      .catch(() => {});
+    return () => controller.abort();
+  }, [isEdit]);
 
   useEffect(() => {
     if (!medicineId) return;

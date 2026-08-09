@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
+import { AutoLogout } from "@/components/dashboard/auto-logout";
 import { Sidebar } from "@/components/dashboard/sidebar";
 import { Topbar } from "@/components/dashboard/topbar";
 import { ToastProvider } from "@/components/ui/toast";
@@ -9,6 +10,7 @@ export default function DashboardLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ToastProvider>
+      <AutoLogout />
       <div className="flex h-screen overflow-hidden bg-zinc-100">
         <Sidebar />
         <div className="flex min-w-0 flex-1 flex-col">
