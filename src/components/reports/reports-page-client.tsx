@@ -136,7 +136,7 @@ export function ReportsPageClient() {
             m.status,
           ]),
         );
-        await logReport({ reportType, format: "csv", fileName: "Full_Inventory_Report.csv" });
+        await logReport({ reportType, format: "csv", fileName: "Full_Inventory_Report.csv" }).catch(() => {});
       } else if (reportType === "expiry") {
         const res = await listExpiryRisk({ page: 1, pageSize: 500 });
         downloadCsv(
@@ -151,7 +151,7 @@ export function ReportsPageClient() {
             r.riskTier,
           ]),
         );
-        await logReport({ reportType, format: "csv", fileName: "Expiry_Report.csv" });
+        await logReport({ reportType, format: "csv", fileName: "Expiry_Report.csv" }).catch(() => {});
       } else if (reportType === "low-stock") {
         const res = await listMedicines({ status: "low-stock", page: 1, pageSize: 500 });
         downloadCsv(
@@ -159,7 +159,7 @@ export function ReportsPageClient() {
           ["Medicine", "Category", "Branch", "Current Stock", "Threshold"],
           res.items.map((m) => [`${m.name} ${m.strength}`.trim(), m.category, m.branch, m.quantity, m.lowStockThreshold]),
         );
-        await logReport({ reportType, format: "csv", fileName: "Low_Stock_Report.csv" });
+        await logReport({ reportType, format: "csv", fileName: "Low_Stock_Report.csv" }).catch(() => {});
       } else {
         const res = await listTransfers({ page: 1, pageSize: 500 });
         downloadCsv(
@@ -175,7 +175,7 @@ export function ReportsPageClient() {
             new Date(t.createdAt).toLocaleDateString("en-GB"),
           ]),
         );
-        await logReport({ reportType, format: "csv", fileName: "Transfer_History_Report.csv" });
+        await logReport({ reportType, format: "csv", fileName: "Transfer_History_Report.csv" }).catch(() => {});
       }
       showToast("success", "Report exported.");
       setRefreshId((id) => id + 1);
