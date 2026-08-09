@@ -76,7 +76,7 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex w-64 shrink-0 flex-col bg-brand-800">
+    <aside className="no-print flex w-64 shrink-0 flex-col bg-brand-800">
       <div className="flex flex-col items-center gap-3 px-6 pb-6 pt-8">
         <div className="rounded-xl bg-white p-3 shadow-sm">
           <Image src="/logo-dark.png" alt="" width={56} height={56} className="rounded-lg" />

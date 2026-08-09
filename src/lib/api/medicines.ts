@@ -38,6 +38,7 @@ export interface ListMedicinesParams {
   status?: MedicineStatus;
   category?: string;
   branch?: string;
+  supplier?: string;
   search?: string;
   page?: number;
   pageSize?: number;
@@ -53,6 +54,14 @@ export interface ListMedicinesResult {
 export interface MedicinesFacets {
   categories: string[];
   branches: string[];
+  suppliers: string[];
+}
+
+export interface InventoryReportSummary {
+  totalMedicines: number;
+  totalUnits: number;
+  inventoryValueGhs: number;
+  lowStockAlerts: number;
 }
 
 export interface MedicinesSummary {
@@ -110,6 +119,19 @@ export function getMedicinesFacets(signal?: AbortSignal): Promise<MedicinesFacet
 
 export function getMedicinesSummary(signal?: AbortSignal): Promise<MedicinesSummary> {
   return apiRequest<MedicinesSummary>("/medicines/summary", { signal });
+}
+
+export function getInventoryReportSummary(
+  params: Omit<ListMedicinesParams, "page" | "pageSize">,
+  signal?: AbortSignal,
+): Promise<InventoryReportSummary> {
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null && value !== "") {
+      query.set(key, String(value));
+    }
+  }
+  return apiRequest<InventoryReportSummary>(`/medicines/report-summary?${query}`, { signal });
 }
 
 export function createMedicine(input: MedicineInput): Promise<Medicine> {

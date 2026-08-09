@@ -46,10 +46,14 @@ export function ExpiryRiskReportPageClient() {
     Promise.all([
       getExpiryRiskSummary(controller.signal),
       listExpiryRisk({ page: 1, pageSize: 500 }, controller.signal),
-    ]).then(([summaryData, riskData]) => {
-      setSummary(summaryData);
-      setRows(riskData.items);
-    });
+    ])
+      .then(([summaryData, riskData]) => {
+        setSummary(summaryData);
+        setRows(riskData.items);
+      })
+      .catch((err) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+      });
     return () => controller.abort();
   }, []);
 

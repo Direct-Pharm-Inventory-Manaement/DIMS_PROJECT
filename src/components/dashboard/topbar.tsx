@@ -36,7 +36,7 @@ export function Topbar() {
   const user = useSyncExternalStore(subscribe, getSnapshot, () => null);
 
   return (
-    <header className="flex items-center justify-between gap-6 border-b border-zinc-200 bg-white px-6 py-3.5">
+    <header className="no-print flex items-center justify-between gap-6 border-b border-zinc-200 bg-white px-6 py-3.5">
       <div className="relative w-full max-w-md">
         <Search
           className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"

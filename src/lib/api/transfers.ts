@@ -19,6 +19,7 @@ export interface Transfer {
   requestedDeliveryDate: string | null;
   notes: string;
   requestedBy: { id: string; name: string };
+  reviewedBy: { id: string; name: string } | null;
   reviewNote: string;
   /** ISO datetime string. */
   createdAt: string;
@@ -66,6 +67,13 @@ export interface TransfersFacets {
   branches: string[];
 }
 
+export interface TransferReportSummary {
+  totalTransfers: number;
+  completed: number;
+  rejected: number;
+  totalUnits: number;
+}
+
 export function listTransfers(
   params: ListTransfersParams,
   signal?: AbortSignal,
@@ -85,6 +93,19 @@ export function getTransfersSummary(signal?: AbortSignal): Promise<TransfersSumm
 
 export function getTransfersFacets(signal?: AbortSignal): Promise<TransfersFacets> {
   return apiRequest<TransfersFacets>("/transfers/facets", { signal });
+}
+
+export function getTransferReportSummary(
+  params: Omit<ListTransfersParams, "page" | "pageSize">,
+  signal?: AbortSignal,
+): Promise<TransferReportSummary> {
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null && value !== "") {
+      query.set(key, String(value));
+    }
+  }
+  return apiRequest<TransferReportSummary>(`/transfers/report-summary?${query}`, { signal });
 }
 
 export function createTransfer(input: CreateTransferInput): Promise<Transfer> {

@@ -11,16 +11,16 @@ export default function DashboardLayout({
   return (
     <ToastProvider>
       <AutoLogout />
-      <div className="flex h-screen overflow-hidden bg-zinc-100">
+      <div className="flex h-screen overflow-hidden bg-zinc-100 print:block print:h-auto print:overflow-visible print:bg-white">
         <Sidebar />
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-w-0 flex-1 flex-col print:block">
           <Topbar />
-          <main className="min-h-0 flex-1 overflow-y-auto p-6">{children}</main>
+          <main className="min-h-0 flex-1 overflow-y-auto p-6 print:overflow-visible print:p-0">{children}</main>
         </div>
         <Link
           href="/dashboard/transfers/new"
           aria-label="Create transfer request"
-          className="fixed bottom-8 right-8 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-brand-700 text-white shadow-lg transition-colors hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:ring-offset-2"
+          className="no-print fixed bottom-8 right-8 z-20 flex h-14 w-14 items-center justify-center rounded-full bg-brand-700 text-white shadow-lg transition-colors hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:ring-offset-2"
         >
           <Plus className="h-6 w-6" aria-hidden />
         </Link>
