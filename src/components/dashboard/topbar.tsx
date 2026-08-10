@@ -1,8 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { Bell, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { getAuth } from "@/lib/auth-storage";
+import { NotificationBell } from "@/components/dashboard/notification-bell";
 import { ROLE_BADGE } from "@/components/users/badges";
 import type { AuthUser } from "@/lib/api/auth";
 
@@ -54,17 +55,7 @@ export function Topbar() {
         <p className="hidden text-right text-sm font-bold leading-tight text-brand-600 md:block">
           Direct Pharmacy{user ? ` – ${user.branch}` : ""}
         </p>
-        <button
-          type="button"
-          aria-label="Notifications"
-          className="relative rounded-full p-2 text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700"
-        >
-          <Bell className="h-5 w-5" aria-hidden />
-          <span
-            className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white"
-            aria-hidden
-          />
-        </button>
+        <NotificationBell />
         <div className="flex items-center gap-3 border-l border-zinc-200 pl-5">
           <div className="text-right leading-tight">
             <p className="text-sm font-bold text-zinc-800">{user?.name ?? "…"}</p>
