@@ -62,6 +62,23 @@ and reachable at `NEXT_PUBLIC_API_URL` (see `.env.local.example`) — start
 - `npm start` — run the production build
 - `npm run lint` — lint the codebase
 
+## Deployment
+
+CI (`.github/workflows/ci.yml`) lints, typechecks, and production-builds the app on
+every push/PR to `main`.
+
+Production runs on [Vercel](https://vercel.com):
+
+1. **Import Project** in the Vercel dashboard, pointing at this repo — Next.js needs
+   no other configuration.
+2. In the project's Environment Variables settings, set `NEXT_PUBLIC_API_URL` to the
+   deployed [DIMS_BACKEND](https://github.com/Direct-Pharm-Inventory-Manaement/DIMS_BACKEND)
+   URL (e.g. its Render URL). This must be set *before* the first deploy — Next.js
+   inlines `NEXT_PUBLIC_*` variables into the client bundle at build time, not read at
+   runtime, so changing it later requires a redeploy to take effect.
+3. Once Vercel assigns a URL, set it as `CORS_ORIGIN` on the backend — until that's
+   done, the deployed frontend's requests will be rejected by the backend's CORS policy.
+
 ## Status
 
 Early build-out. Both repos are scaffolded and wired to talk to each other; feature
