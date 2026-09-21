@@ -81,3 +81,7 @@ export function setUserStatus(id: string, status: UserAccountStatus): Promise<Sy
 export function resetUserPassword(id: string): Promise<{ temporaryPassword: string; emailSent: boolean }> {
   return apiRequest(`/users/${id}/reset-password`, { method: "POST" });
 }
+
+export function deleteUser(id: string): Promise<void> {
+  return apiRequest<void>(`/users/${id}`, { method: "DELETE" });
+}

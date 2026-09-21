@@ -10,6 +10,7 @@ import {
   ShieldOff,
   ShieldCheck,
   SlidersHorizontal,
+  Trash2,
 } from "lucide-react";
 import { ApiError } from "@/lib/api/client";
 import {
@@ -71,6 +72,7 @@ export function UsersTable({
   refreshId,
   branches,
   onEdit,
+  onDelete,
   onMutated,
   tabs,
 }: {
@@ -78,6 +80,7 @@ export function UsersTable({
   refreshId: number;
   branches: string[];
   onEdit: (user: SystemUser) => void;
+  onDelete: (user: SystemUser) => void;
   onMutated: () => void;
   /** Rendered beside the "User Directory" title — role tabs from the page client. */
   tabs: ReactNode;
@@ -294,6 +297,14 @@ export function UsersTable({
                           ) : (
                             <ShieldCheck className="h-4 w-4" aria-hidden />
                           )}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => onDelete(u)}
+                          aria-label={`Delete ${u.name}`}
+                          className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-600"
+                        >
+                          <Trash2 className="h-4 w-4" aria-hidden />
                         </button>
                       </div>
                     </td>

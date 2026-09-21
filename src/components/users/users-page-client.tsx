@@ -6,6 +6,7 @@ import { getTransfersFacets } from "@/lib/api/transfers";
 import { getUsersSummary, type SystemUser, type UserRole, type UsersSummary } from "@/lib/api/users";
 import { UsersTable } from "@/components/users/users-table";
 import { UserFormModal } from "@/components/users/user-form-modal";
+import { DeleteUserModal } from "@/components/users/delete-user-modal";
 
 const TABS: { label: string; roles?: UserRole[] }[] = [
   { label: "All" },
@@ -55,6 +56,7 @@ export function UsersPageClient() {
   const [branches, setBranches] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState(0);
   const [modalUser, setModalUser] = useState<SystemUser | "new" | null>(null);
+  const [deletingUser, setDeletingUser] = useState<SystemUser | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -149,6 +151,7 @@ export function UsersPageClient() {
         branches={branches}
         tabs={tabs}
         onEdit={(user) => setModalUser(user)}
+        onDelete={(user) => setDeletingUser(user)}
         onMutated={handleMutated}
       />
 
@@ -157,6 +160,17 @@ export function UsersPageClient() {
           user={modalUser === "new" ? undefined : modalUser}
           onClose={() => setModalUser(null)}
           onSaved={handleMutated}
+        />
+      )}
+
+      {deletingUser && (
+        <DeleteUserModal
+          user={deletingUser}
+          onClose={() => setDeletingUser(null)}
+          onDeleted={() => {
+            setDeletingUser(null);
+            handleMutated();
+          }}
         />
       )}
     </div>
