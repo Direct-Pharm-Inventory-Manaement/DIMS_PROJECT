@@ -64,7 +64,9 @@ export function getUsersSummary(signal?: AbortSignal): Promise<UsersSummary> {
   return apiRequest<UsersSummary>("/users/summary", { signal });
 }
 
-export function createUser(input: UserInput): Promise<{ user: SystemUser; temporaryPassword: string }> {
+export function createUser(
+  input: UserInput,
+): Promise<{ user: SystemUser; temporaryPassword: string; emailSent: boolean }> {
   return apiRequest("/users", { method: "POST", body: input });
 }
 
@@ -76,6 +78,6 @@ export function setUserStatus(id: string, status: UserAccountStatus): Promise<Sy
   return apiRequest<SystemUser>(`/users/${id}/status`, { method: "POST", body: { status } });
 }
 
-export function resetUserPassword(id: string): Promise<{ temporaryPassword: string }> {
+export function resetUserPassword(id: string): Promise<{ temporaryPassword: string; emailSent: boolean }> {
   return apiRequest(`/users/${id}/reset-password`, { method: "POST" });
 }

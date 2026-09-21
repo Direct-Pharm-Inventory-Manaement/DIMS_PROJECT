@@ -7,6 +7,8 @@ import {
   Copy,
   KeyRound,
   Loader2,
+  Mail,
+  MailWarning,
   Save,
   UserPlus,
   X,
@@ -26,29 +28,53 @@ import { ROLE_OPTIONS } from "@/components/users/badges";
 const inputClass =
   "w-full rounded-lg border border-zinc-300 bg-white py-2.5 px-3.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/25 aria-[invalid=true]:border-red-400";
 
-function TempPasswordPanel({ password }: { password: string }) {
+function TempPasswordPanel({
+  password,
+  email,
+  emailSent,
+}: {
+  password: string;
+  email: string;
+  emailSent: boolean;
+}) {
   const [copied, setCopied] = useState(false);
   return (
-    <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
-      <p className="text-sm font-semibold text-emerald-800">
-        Share this one-time password with the user — it won&apos;t be shown again.
-      </p>
-      <div className="mt-2 flex items-center gap-2">
-        <code className="flex-1 rounded-lg bg-white px-3 py-2 font-mono text-sm text-zinc-800">
-          {password}
-        </code>
-        <button
-          type="button"
-          onClick={() => {
-            navigator.clipboard.writeText(password);
-            setCopied(true);
-            window.setTimeout(() => setCopied(false), 1500);
-          }}
-          className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
-        >
-          {copied ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
-          {copied ? "Copied" : "Copy"}
-        </button>
+    <div className="flex flex-col gap-3">
+      <div
+        className={`flex items-start gap-2.5 rounded-lg border p-3 text-sm font-semibold ${
+          emailSent ? "border-sky-200 bg-sky-50 text-sky-800" : "border-amber-200 bg-amber-50 text-amber-800"
+        }`}
+      >
+        {emailSent ? (
+          <Mail className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+        ) : (
+          <MailWarning className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+        )}
+        {emailSent
+          ? `A welcome email with these credentials was sent to ${email}.`
+          : `Couldn't send the welcome email to ${email} — share the credentials below directly.`}
+      </div>
+      <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+        <p className="text-sm font-semibold text-emerald-800">
+          You can also share this one-time password directly — it won&apos;t be shown again.
+        </p>
+        <div className="mt-2 flex items-center gap-2">
+          <code className="flex-1 rounded-lg bg-white px-3 py-2 font-mono text-sm text-zinc-800">
+            {password}
+          </code>
+          <button
+            type="button"
+            onClick={() => {
+              navigator.clipboard.writeText(password);
+              setCopied(true);
+              window.setTimeout(() => setCopied(false), 1500);
+            }}
+            className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+          >
+            {copied ? <Check className="h-4 w-4" aria-hidden /> : <Copy className="h-4 w-4" aria-hidden />}
+            {copied ? "Copied" : "Copy"}
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -77,6 +103,7 @@ export function UserFormModal({
   const [saving, setSaving] = useState(false);
   const [resettingPassword, setResettingPassword] = useState(false);
   const [temporaryPassword, setTemporaryPassword] = useState<string | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -114,6 +141,7 @@ export function UserFormModal({
       } else {
         const result = await createUser(input);
         setTemporaryPassword(result.temporaryPassword);
+        setEmailSent(result.emailSent);
       }
     } catch (err) {
       setFormError(err instanceof ApiError ? err.message : "Failed to save user.");
@@ -129,6 +157,7 @@ export function UserFormModal({
     try {
       const result = await resetUserPassword(user.id);
       setTemporaryPassword(result.temporaryPassword);
+      setEmailSent(result.emailSent);
     } catch (err) {
       setFormError(err instanceof ApiError ? err.message : "Failed to reset password.");
     } finally {
@@ -165,7 +194,7 @@ export function UserFormModal({
 
         {temporaryPassword ? (
           <div className="mt-5 flex flex-col gap-4">
-            <TempPasswordPanel password={temporaryPassword} />
+            <TempPasswordPanel password={temporaryPassword} email={user?.email ?? email} emailSent={emailSent} />
             <button
               type="button"
               onClick={() => {
