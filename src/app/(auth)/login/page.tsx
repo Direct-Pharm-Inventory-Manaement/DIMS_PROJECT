@@ -24,9 +24,9 @@ export default function LoginPage() {
             <div className="flex justify-center">
               <Image
                 src="/login-logo.png"
-                alt="Direct Inventory Manager — Pharmacy inventory, in order"
-                width={280}
-                height={72}
+                alt="Pharmacy Direct — Your health, Our Priority"
+                width={190}
+                height={227}
                 priority
               />
             </div>
