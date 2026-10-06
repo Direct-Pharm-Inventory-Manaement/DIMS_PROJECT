@@ -4,10 +4,10 @@ export default function AuthLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
-      <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+    <div className="flex min-h-screen flex-col">
+      <main className="flex flex-1 flex-col">{children}</main>
       <footer className="bg-accent-500 text-white">
-        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-3 px-6 py-4 text-xs font-medium tracking-wide sm:flex-row">
+        <div className="mx-auto flex w-full max-w-7xl flex-col flex-wrap items-center justify-center gap-3 px-6 py-4 text-center text-xs font-medium tracking-wide sm:flex-row sm:justify-between sm:text-left">
           <p className="uppercase">
             {`© ${new Date().getFullYear()} Direct Inventory Manager`}
           </p>

@@ -18,7 +18,7 @@ export default function LoginPage() {
         description="Regain access to your pharmacy's management dashboard. Our systematic approach ensures data security while maintaining operational continuity for your staff."
       />
 
-      <section className="flex flex-1 flex-col items-center overflow-y-auto bg-zinc-100 px-4 py-8 sm:px-8">
+      <section className="flex flex-1 flex-col items-center bg-zinc-100 px-4 py-8 sm:px-8">
         <div className="my-auto flex w-full max-w-md flex-col gap-6">
           <div className="w-full rounded-2xl bg-white p-8 shadow-sm sm:p-10">
             <div className="flex justify-center">
