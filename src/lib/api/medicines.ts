@@ -26,6 +26,8 @@ export interface Medicine {
   storageLocation: string;
   lowStockThreshold: number;
   reorderLevel: number | null;
+  /** Manually entered units/day used for stockout predictions; null if never set. */
+  avgDailyConsumption: number | null;
   /** ISO datetime string, or null. */
   manufacturingDate: string | null;
   internalNotes: string;
@@ -91,6 +93,7 @@ export interface MedicineInput {
   storageLocation?: string;
   lowStockThreshold?: number;
   reorderLevel?: number | null;
+  avgDailyConsumption?: number | null;
   manufacturingDate?: string | null;
   internalNotes?: string;
   expiryDate: string;

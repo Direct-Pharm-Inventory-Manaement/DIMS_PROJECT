@@ -10,7 +10,6 @@ import {
   FileBarChart2,
   LayoutDashboard,
   LogOut,
-  PackagePlus,
   Pill,
   Settings,
   TrendingDown,
@@ -33,7 +32,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Expiry Risk Dashboard", href: "/dashboard/expiry-risk", icon: CalendarClock },
   { label: "Low-Stock Predictions", href: "/dashboard/low-stock", icon: TrendingDown },
   { label: "Transfer Requests", href: "/dashboard/transfers", icon: ArrowLeftRight },
-  { label: "Create Transfer Request", href: "/dashboard/transfers/new", icon: PackagePlus },
   { label: "Reports", href: "/dashboard/reports", icon: FileBarChart2 },
   { label: "User Management", href: "/dashboard/users", icon: UsersRound },
 ];

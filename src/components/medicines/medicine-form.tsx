@@ -74,6 +74,7 @@ interface FormState {
   expiryDate: string;
   lowStockThreshold: string;
   reorderLevel: string;
+  avgDailyConsumption: string;
   internalNotes: string;
 }
 
@@ -96,6 +97,7 @@ const EMPTY_FORM: FormState = {
   expiryDate: "",
   lowStockThreshold: "",
   reorderLevel: "",
+  avgDailyConsumption: "",
   internalNotes: "",
 };
 
@@ -124,6 +126,7 @@ function medicineToForm(m: Medicine): FormState {
     expiryDate: toDateInputValue(m.expiryDate),
     lowStockThreshold: String(m.lowStockThreshold),
     reorderLevel: m.reorderLevel === null ? "" : String(m.reorderLevel),
+    avgDailyConsumption: m.avgDailyConsumption === null ? "" : String(m.avgDailyConsumption),
     internalNotes: m.internalNotes,
   };
 }
@@ -332,6 +335,10 @@ export function MedicineForm({ medicineId }: { medicineId?: string }) {
       next.reorderLevel = "Cannot be negative.";
     }
 
+    if (form.avgDailyConsumption !== "" && Number(form.avgDailyConsumption) < 0) {
+      next.avgDailyConsumption = "Cannot be negative.";
+    }
+
     if (!form.expiryDate) {
       next.expiryDate = "Expiry date is required.";
     } else if (!isEdit && form.expiryDate < minExpiryDateValue()) {
@@ -359,6 +366,8 @@ export function MedicineForm({ medicineId }: { medicineId?: string }) {
       storageLocation: form.storageLocation.trim(),
       lowStockThreshold: Number(form.lowStockThreshold),
       reorderLevel: form.reorderLevel === "" ? null : Number(form.reorderLevel),
+      avgDailyConsumption:
+        form.avgDailyConsumption === "" ? null : Number(form.avgDailyConsumption),
       manufacturingDate: form.manufacturingDate
         ? new Date(form.manufacturingDate).toISOString()
         : null,
@@ -684,7 +693,7 @@ export function MedicineForm({ medicineId }: { medicineId?: string }) {
               </Field>
             </div>
 
-            <div className="grid gap-5 sm:grid-cols-2">
+            <div className="grid gap-5 sm:grid-cols-3">
               <Field
                 id="lowStockThreshold"
                 label="Minimum Stock Level"
@@ -713,7 +722,28 @@ export function MedicineForm({ medicineId }: { medicineId?: string }) {
                   className={inputClass}
                 />
               </Field>
+              <Field
+                id="avgDailyConsumption"
+                label="Avg. Daily Consumption"
+                error={errors.avgDailyConsumption}
+              >
+                <input
+                  id="avgDailyConsumption"
+                  type="number"
+                  min={0}
+                  step="0.1"
+                  value={form.avgDailyConsumption}
+                  onChange={(e) => setField("avgDailyConsumption", e.target.value)}
+                  placeholder="Units sold/dispensed per day"
+                  aria-invalid={Boolean(errors.avgDailyConsumption)}
+                  className={inputClass}
+                />
+              </Field>
             </div>
+            <p className="-mt-2 text-xs leading-5 text-zinc-400">
+              Drives the Low-Stock Predictions dashboard — estimate how many units move per
+              day at this branch. Leave blank if unknown.
+            </p>
           </section>
 
           <section className="flex flex-col gap-5">
