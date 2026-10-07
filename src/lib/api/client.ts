@@ -1,6 +1,11 @@
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
+// Endpoints reachable without a session — a 401 from these means "wrong
+// credentials", not "your session is invalid", so they must never trigger
+// the redirect below.
+const PUBLIC_PATHS = ["/auth/login", "/auth/forgot-password", "/auth/verify-otp"];
+
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -59,6 +64,17 @@ export async function apiRequest<T>(
       if (data.message) message = data.message;
     } catch {
       // non-JSON error body; keep the status-based message
+    }
+    // A protected-route 401 means the stored token is missing/expired — the
+    // only honest response is to actually send them to sign in, not surface
+    // this inline as if it were a normal data-loading error.
+    if (
+      response.status === 401 &&
+      !PUBLIC_PATHS.includes(path) &&
+      typeof window !== "undefined"
+    ) {
+      localStorage.removeItem("dims.auth");
+      window.location.href = "/login";
     }
     throw new ApiError(message, response.status);
   }
