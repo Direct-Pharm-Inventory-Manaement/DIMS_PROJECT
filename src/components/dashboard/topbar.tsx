@@ -7,6 +7,13 @@ import { NotificationBell } from "@/components/dashboard/notification-bell";
 import { ROLE_BADGE } from "@/components/users/badges";
 import type { AuthUser } from "@/lib/api/auth";
 
+/** These roles oversee every branch, not just the one their account is registered under. */
+const CROSS_BRANCH_ROLES: ReadonlySet<AuthUser["role"]> = new Set(["super_admin", "administrator"]);
+
+function branchLabel(user: AuthUser): string {
+  return CROSS_BRANCH_ROLES.has(user.role) ? "All Branches" : user.branch;
+}
+
 function initials(name: string): string {
   const parts = name.trim().split(/\s+/);
   return ((parts[0]?.[0] ?? "") + (parts[parts.length - 1]?.[0] ?? "")).toUpperCase();
@@ -53,7 +60,7 @@ export function Topbar() {
 
       <div className="flex shrink-0 items-center gap-5">
         <p className="hidden text-right text-sm font-bold leading-tight text-brand-600 md:block">
-          Direct Pharmacy{user ? ` – ${user.branch}` : ""}
+          Direct Pharmacy{user ? ` – ${branchLabel(user)}` : ""}
         </p>
         <NotificationBell />
         <div className="flex items-center gap-3 border-l border-zinc-200 pl-5">
